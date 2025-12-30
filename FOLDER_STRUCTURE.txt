@@ -1,0 +1,60 @@
+================================================================================
+                    ALL FILES ARE IN ONE FOLDER
+================================================================================
+
+📁 Main Folder: habitflow-website
+   Location: C:\Users\ADMIN\Downloads\habitflow-website
+
+All files are contained within this single folder!
+
+
+📂 Folder Structure (All inside habitflow-website/):
+================================================================================
+
+habitflow-website/                    ← ALL FILES ARE HERE
+│
+├── 📄 Root Files (15 files)
+│   ├── server.js                    (Main server file)
+│   ├── package.json                 (Dependencies)
+│   ├── Dockerfile                   (Docker config)
+│   ├── docker-compose.yml           (Docker Compose)
+│   ├── .env                         (Environment variables)
+│   ├── .gitignore                   (Git ignore rules)
+│   ├── .dockerignore                (Docker ignore)
+│   ├── README.md                    (Documentation)
+│   ├── DEPLOYMENT.md                (Deployment guide)
+│   ├── GITHUB_SETUP.md              (GitHub setup)
+│   ├── QUICK_START.md               (Quick start)
+│   ├── PROJECT_SUMMARY.md           (Project overview)
+│   ├── NEXT_STEPS.txt               (Next steps)
+│   └── setup-git.ps1                (Setup script)
+│
+├── 📁 public/                       (Static files - REQUIRED for Express)
+│   └── index.html                   (Your HTML file - unchanged)
+│
+├── 📁 routes/                       (API routes - REQUIRED for backend)
+│   ├── preorder.js                  (Pre-order API)
+│   └── contact.js                   (Contact API)
+│
+├── 📁 .github/                      (GitHub Actions - REQUIRED for CI/CD)
+│   └── workflows/
+│       └── deploy.yml               (Deployment workflow)
+│
+├── 📁 config/                       (Empty - for future use)
+└── 📁 models/                       (Empty - for future use)
+
+
+================================================================================
+✅ SUMMARY: Everything is in ONE folder (habitflow-website)
+================================================================================
+
+The subdirectories (public/, routes/, .github/) are NECESSARY because:
+
+1. Express.js server REQUIRES static files in a "public" folder
+2. API routes are organized in "routes" folder (best practice)
+3. GitHub Actions REQUIRES ".github/workflows" structure
+
+You can ZIP this entire "habitflow-website" folder and it contains everything!
+
+================================================================================
+

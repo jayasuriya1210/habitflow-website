@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow - Smart Habit Tracking Device</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #6366f1;
+            --color-primary-dark: #4f46e5;
+            --color-secondary: #ec4899;
+            --color-accent: #f59e0b;
+            --color-success: #10b981;
+            --color-dark: #0f172a;
+            --color-dark-light: #1e293b;
+            --color-text: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-border: #334155;
+            --space-4: 4px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-24: 24px;
+            --space-32: 32px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1f3a 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-24);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-24);
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: var(--space-8) var(--space-16);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            padding: var(--space-32) var(--space-24);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-32);
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: var(--space-16);
+            line-height: 1.2;
+            background: linear-gradient(135deg, #fff 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-24);
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-16);
+            margin-bottom: var(--space-32);
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: var(--space-32);
+            margin-top: var(--space-32);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-top: var(--space-4);
+        }
+
+        .hero-image {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: var(--space-32) var(--space-24);
+            background: var(--color-dark-light);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-12);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-24);
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-24);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: var(--space-16);
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--space-8);
+        }
+
+        .feature-card p {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Product Showcase */
+        .showcase {
+            padding: var(--space-32) var(--space-24);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+        }
+
+        .showcase-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-32);
+            align-items: center;
+        }
+
+        .showcase-image {
+            position: relative;
+            height: 450px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .showcase-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .showcase-content h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-16);
+        }
+
+        .showcase-content p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-16);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: var(--space-24);
+        }
+
+        .benefits-list li {
+            display: flex;
+            gap: var(--space-12);
+            margin-bottom: var(--space-12);
+            font-size: 15px;
+        }
+
+        .benefits-list li::before {
+            content: "✓";
+            color: var(--color-success);
+            font-weight: 700;
+            font-size: 18px;
+            min-width: 20px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: var(--space-32) var(--space-24);
+            background: var(--color-dark-light);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-24);
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-24);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
+        }
+
+        .stars {
+            color: var(--color-accent);
+            font-size: 16px;
+            margin-bottom: var(--space-12);
+        }
+
+        .testimonial-text {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-16);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: var(--space-4);
+        }
+
+        .testimonial-role {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: var(--space-32) var(--space-24);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-24);
+            margin-top: var(--space-32);
+        }
+
+        .pricing-card {
+            background: var(--color-dark);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-24);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: var(--space-4) var(--space-12);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .pricing-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+        }
+
+        .pricing-price {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-8);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--space-24);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: var(--space-24);
+        }
+
+        .pricing-features li {
+            display: flex;
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--color-success);
+            font-weight: 700;
+            min-width: 16px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: var(--space-32) var(--space-24);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-16);
+            color: white;
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-24);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--space-16);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--color-primary);
+        }
+
+        .cta .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-dark);
+            border-top: 1px solid var(--color-border);
+            padding: var(--space-32) var(--space-24);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-32);
+            margin-bottom: var(--space-32);
+        }
+
+        .footer-column h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: var(--space-16);
+            letter-spacing: 1px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: var(--space-8);
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: var(--space-24);
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-container, .showcase-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 32px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                margin-top: 60px;
+                min-height: auto;
+            }
+
+            .hero-image, .showcase-image {
+                height: 300px;
+            }
+
+            .section-header h2 {
+                font-size: 28px;
+            }
+
+            .cta h2 {
+                font-size: 28px;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">⚡ HabitFlow</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#product">Product</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+            </ul>
+            <button class="nav-cta" onclick="alert('Pre-order coming soon!')">Pre-Order</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Build Better Habits with Intelligence</h1>
+                <p>HabitFlow is the world's first AI-powered habit tracking wearable that understands your patterns and helps you build lasting change. Real-time insights. Perfect accountability.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="alert('Pre-order opening January 2025!')">Get Early Access</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('product').scrollIntoView()">Learn More</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Early Users</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Habit Categories</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1763648548/search_images/06e114ad28d2ee530229d734a62b99a25b0aa527.jpg" alt="HabitFlow Device">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Everything you need to transform your habits into lasting lifestyle changes</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Get instant insights into your habit patterns with AI-powered analytics and trend detection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Coach</h3>
+                    <p>Personalized recommendations based on your unique habits, preferences, and lifestyle.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Smart Reminders</h3>
+                    <p>Intelligent notifications at the perfect time to keep you on track without being intrusive.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Community</h3>
+                    <p>Connect with others, share achievements, and stay motivated together on your journey.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Goal Tracking</h3>
+                    <p>Set, track, and achieve multiple goals simultaneously with visual progress indicators.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Privacy First</h3>
+                    <p>Your data is yours. Military-grade encryption keeps everything secure and private.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="showcase" id="product">
+        <div class="showcase-container">
+            <div class="showcase-image">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1767072646/search_images/b4aca30e4150544e3131844789cb3eeef6dee0aa.jpg" alt="HabitFlow Smart Device">
+            </div>
+            <div class="showcase-content">
+                <h2>Smart Device. Smarter You.</h2>
+                <p>The HabitFlow wearable combines cutting-edge sensors with AI intelligence to understand your habits at a deeper level than ever before.</p>
+                <ul class="benefits-list">
+                    <li>8-day battery life with always-on display</li>
+                    <li>Advanced biometric sensors (heart rate, sleep, stress)</li>
+                    <li>IP68 waterproof rating for 24/7 tracking</li>
+                    <li>Syncs with 200+ health apps seamlessly</li>
+                    <li>Lightweight titanium design (38g)</li>
+                    <li>Works with iOS, Android, and web platform</li>
+                </ul>
+                <button class="btn btn-primary" onclick="alert('Adding to cart coming soon!')">Reserve Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="testimonials-container">
+            <div class="section-header">
+                <h2>Loved by Users Worldwide</h2>
+                <p>See what real people are saying about HabitFlow</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"HabitFlow completely changed how I approach my daily routine. The AI coaching is incredibly personalized and actually works. I've never been more consistent!"</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">Product Designer, San Francisco</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"As someone who struggled with accountability, HabitFlow's insights and community support made all the difference. I've built 8 solid habits in 3 months!"</p>
+                    <div class="testimonial-author">Marcus Johnson</div>
+                    <div class="testimonial-role">Fitness Coach, New York</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The device is beautiful and lightweight. The data visualization helps me understand my patterns like never before. Best investment for my health!"</p>
+                    <div class="testimonial-author">Priya Patel</div>
+                    <div class="testimonial-role">Entrepreneur, Mumbai</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing</h2>
+                <p>Choose the plan that works best for you</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">$199</div>
+                    <div class="pricing-period">One-time device cost</div>
+                    <ul class="pricing-features">
+                        <li>HabitFlow Device</li>
+                        <li>Basic tracking (5 habits)</li>
+                        <li>Mobile app access</li>
+                        <li>Email support</li>
+                        <li>3 months free premium</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="alert('Pre-order opening January 2025!')">Get Started</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">$299</div>
+                    <div class="pricing-period">One-time device cost</div>
+                    <ul class="pricing-features">
+                        <li>HabitFlow Device + Band</li>
+                        <li>Unlimited habit tracking</li>
+                        <li>AI Coach & analytics</li>
+                        <li>Community access</li>
+                        <li>1 year premium included</li>
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="alert('Pre-order opening January 2025!')">Reserve Pro</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">Bulk orders & teams</div>
+                    <ul class="pricing-features">
+                        <li>Custom deployment</li>
+                        <li>Team management tools</li>
+                        <li>Advanced analytics</li>
+                        <li>API access</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="alert('Contact sales at sales@habitflow.com')">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Ready to Transform Your Habits?</h2>
+            <p>Join thousands of people building better lives with HabitFlow. Early adopters get exclusive pricing and lifetime community access.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="alert('Pre-order opening January 2025!')">Get Early Access</button>
+                <button class="btn btn-secondary" style="border-color: white; color: white;" onclick="alert('Email: hello@habitflow.com')">Contact Us</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: var(--space-16); background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">⚡ HabitFlow</div>
+                <p style="color: var(--color-text-secondary); font-size: 14px;">Transforming how the world builds better habits through intelligent technology.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Product</h3>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#product">Product</a>
+                <a href="">Beta Program</a>
+            </div>
+            <div class="footer-column">
+                <h3>Company</h3>
+                <a href="">About Us</a>
+                <a href="">Blog</a>
+                <a href="">Careers</a>
+                <a href="">Press</a>
+            </div>
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <a href="">Privacy Policy</a>
+                <a href="">Terms of Service</a>
+                <a href="">Contact</a>
+                <a href="">Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 HabitFlow Inc. All rights reserved. | Made with ❤️ to help you thrive.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 23, 42, 0.98)';
+                nav.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+            } else {
+                nav.style.background = 'rgba(15, 23, 42, 0.95)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
